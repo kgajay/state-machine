@@ -1,0 +1,23 @@
+package com.kgajay.demo.config;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import io.dropwizard.Configuration;
+import io.dropwizard.db.DataSourceFactory;
+import lombok.Data;
+import org.hibernate.validator.constraints.NotEmpty;
+
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+
+/**
+ * @author ajay.kg created on 22/07/17.
+ */
+@Data
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class AppConfiguration extends Configuration {
+
+    private DataSourceFactory database;
+
+    private String appName;
+
+}
