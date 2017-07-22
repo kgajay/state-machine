@@ -19,7 +19,7 @@ server:
     timeZone: Asia/Calcutta
 
 database:
-  driverClass: com.mysql.jdbc.Driver
+  driverClass: com.mysql.cj.jdbc.Driver
   user: root
   password: mysql
   url: jdbc:mysql://127.0.0.1:3306/jaxrs
@@ -37,3 +37,6 @@ database:
   checkConnectionWhileIdle: false
 
 appName: routing numbers srapper
+
+routingNumConfig:
+  url: http://us-routing-numbers.com

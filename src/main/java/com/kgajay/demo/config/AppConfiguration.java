@@ -4,10 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.dropwizard.Configuration;
 import io.dropwizard.db.DataSourceFactory;
 import lombok.Data;
-import org.hibernate.validator.constraints.NotEmpty;
-
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
 
 /**
  * @author ajay.kg created on 22/07/17.
@@ -20,4 +16,5 @@ public class AppConfiguration extends Configuration {
 
     private String appName;
 
+    private RoutingNumConfig routingNumConfig;
 }

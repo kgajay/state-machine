@@ -2,7 +2,7 @@ This is sample maven test project for ui automation using selenium
 
 Java lib =>
     
-    DropWizard, Selenium, Mysql
+    DropWizard, Selenium, Spring, Mysql
     
 Steps to configure
 
@@ -19,11 +19,13 @@ Steps to configure
     6: start server => java -jar target/sample-ui-scraping-0.0.1-SNAPSHOT.jar  ./src/main/resources/config.yml (this will start server on http://127.0.0.1:9020)
     
     7: To check run below command
-    
+        
         A)  curl -X GET http://127.0.0.1:9020/v1/app/name
         
         B)  curl -X GET http://127.0.0.1:9020/admin/ping
         
         C)  curl -X GET http://127.0.0.1:9020/admin/healthcheck    
         
+    8: Routing number search API
         
+        A) curl -X POST http://127.0.0.1:9020/v1/search/routing-number -d'["xyz", "abc"]' -H "Content-Type: application/json"

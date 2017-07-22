@@ -2,6 +2,7 @@ package com.kgajay.demo.config;
 
 import com.kgajay.demo.app.db.DBDao;
 import com.kgajay.demo.utils.SpringProvider;
+import com.kgajay.demo.app.service.WebDriverService;
 import io.dropwizard.db.DataSourceFactory;
 import io.dropwizard.jdbi.DBIFactory;
 import io.dropwizard.setup.Environment;
@@ -15,7 +16,7 @@ import javax.inject.Inject;
  * @author ajay.kg created on 22/07/17.
  */
 @Configuration
-@ComponentScan({ "com.kgajay.demo.app.resource" })
+@ComponentScan({ "com.kgajay.demo.app" })
 public class SpringConfig {
 
     @Inject
@@ -40,6 +41,10 @@ public class SpringConfig {
         return dbiFactory.build(environment, configuration.getDatabase(), "dbDao").onDemand(DBDao.class);
     }
 
+    @Bean
+    public WebDriverService webDriverUtils() {
+        return new WebDriverService();
+    }
     /**
      * Get bean of given type
      */

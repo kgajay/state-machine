@@ -4,10 +4,12 @@ import com.codahale.metrics.health.HealthCheck;
 import com.kgajay.demo.app.db.DBDao;
 import io.dropwizard.db.DataSourceFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 /**
  * @author ajay.kg created on 22/07/17.
  */
+@Service
 public class DataSourceHealthCheck extends HealthCheck {
 
     @Autowired

@@ -1,11 +1,14 @@
 package com.kgajay.demo;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
+import com.kgajay.demo.app.healthcheck.DataSourceHealthCheck;
 import com.kgajay.demo.app.resource.RoutingNumberResource;
 import com.kgajay.demo.config.AppConfiguration;
 import com.kgajay.demo.config.SpringConfig;
 import com.kgajay.demo.utils.SpringProvider;
+import com.kgajay.demo.app.service.WebDriverService;
 import io.dropwizard.Application;
+import io.dropwizard.lifecycle.Managed;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import lombok.extern.slf4j.Slf4j;
@@ -33,7 +36,22 @@ public class SyncApplication extends Application<AppConfiguration> {
         SpringProvider.INSTANCE.getContext().register(SpringConfig.class);
         SpringProvider.INSTANCE.getContext().refresh();
 
-//        environment.healthChecks().register("database", new DataSourceHealthCheck());
+        environment.lifecycle().manage(new Managed() {
+
+            @Override
+            public void start() throws Exception {
+
+            }
+
+            @Override
+            public void stop() throws Exception {
+                SpringProvider.INSTANCE.getContext().destroy();
+                SpringProvider.INSTANCE.getContext().getBean(WebDriverService.class).tearDown();
+            }
+        });
+
+
+        environment.healthChecks().register("database", SpringProvider.INSTANCE.getContext().getBean(DataSourceHealthCheck.class));
 
         environment.jersey().register(SpringProvider.INSTANCE.getContext().getBean(RoutingNumberResource.class));
 
