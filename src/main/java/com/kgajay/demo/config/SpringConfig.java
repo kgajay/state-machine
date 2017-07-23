@@ -1,8 +1,8 @@
 package com.kgajay.demo.config;
 
 import com.kgajay.demo.app.db.DBDao;
-import com.kgajay.demo.utils.SpringProvider;
 import com.kgajay.demo.app.service.WebDriverService;
+import com.kgajay.demo.utils.SpringProvider;
 import io.dropwizard.db.DataSourceFactory;
 import io.dropwizard.jdbi.DBIFactory;
 import io.dropwizard.setup.Environment;
@@ -45,9 +45,7 @@ public class SpringConfig {
     public WebDriverService webDriverUtils() {
         return new WebDriverService();
     }
-    /**
-     * Get bean of given type
-     */
+
     public static <T> T getBean(Class<T> cls) {
         return SpringProvider.INSTANCE.getContext().getBean(cls);
     }

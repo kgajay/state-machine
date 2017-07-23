@@ -18,8 +18,8 @@ public class WebDriverUtils {
 	/**
 	 * wait for the element to be displayed on web page
 	 *
-	 * @param element => element to wait for
-	 * @param waitSec => duration to wait
+	 * @param element element to wait for
+	 * @param waitSec duration to wait
 	 */
 	public static void waitForElement(WebElement element, int waitSec) {
 		new FluentWait<WebElement>(element)
@@ -37,9 +37,9 @@ public class WebDriverUtils {
 	/**
 	 * wait for the element to be displayed on web page
 	 *
-	 * @param element => element to wait for
-	 * @param value   => value to be appeared on the element
-	 * @param waitSec => duration to wait
+	 * @param element element to wait for
+	 * @param value  value to be appeared on the element
+	 * @param waitSec duration to wait
 	 */
 	public static void waitForElementValue(WebElement element, final String value, final int waitSec) {
 		new FluentWait<WebElement>(element)
@@ -58,9 +58,9 @@ public class WebDriverUtils {
 	/**
 	 * wait for the element to be displayed on web page
 	 *
-	 * @param element => element to wait for
-	 * @param value   => value to be appeared on the element
-	 * @param waitSec => duration to wait
+	 * @param element element to wait for
+	 * @param value value to be appeared on the element
+	 * @param waitSec duration to wait
 	 */
 	public static void waitForSelectElementValue(WebElement element, final String value, final int waitSec) {
 		new FluentWait<WebElement>(element)
@@ -84,9 +84,9 @@ public class WebDriverUtils {
 	/**
 	 * wait for the element to be displayed on web page
 	 *
-	 * @param driver => webDriver
-	 * @param locator => locateElement
-	 * @param sec => duration to wait
+	 * @param driver webDriver
+	 * @param locator locateElement
+	 * @param sec duration to wait
 	 */
 	public static void waitForWebElementToAppear(WebDriver driver, final By locator, int sec) {
 		new FluentWait<WebDriver>(driver)

@@ -26,6 +26,30 @@ Steps to configure
         
         C)  curl -X GET http://127.0.0.1:9020/admin/healthcheck    
         
-    8: Routing number search API
+    8: Routing number search from site API
         
         A) curl -X POST http://127.0.0.1:9020/v1/search/routing-number -d'["xyz", "abc"]' -H "Content-Type: application/json"
+        
+    9: Sample crud API 
+        
+        A) Add a bank info 
+            curl -X POST http://127.0.0.1:9020/v1/bank-info \
+                 -H 'content-type: application/json' \
+                 -d '{
+                "routing_number": 122000030,
+                "name": "Bank of America",
+                "city": "SAN FRANCISCO",
+                "state": "CA",
+                "zip_code": "94137",
+                "address": "PO BOX 37025"
+               }'
+           
+        B) Get bank info by id
+            curl -X GET http://127.0.0.1:9020/v1/bank-info/1
+        
+        C) Get bank info by routing number
+            curl -X GET http://127.0.0.1:9020/v1/bank-info/search/122000030
+        
+        D) Search bank info by name
+            curl -X GET 'http://127.0.0.1:9020/v1/bank-info/search?name=Bank%20of%20America'
+  
