@@ -24,6 +24,12 @@ public interface DBDao {
     @GetGeneratedKeys
     public Long insertBankInfo(@Bind("routingNumber") Long routingNumber, @Bind("name") String name, @Bind("city") String city, @Bind("state") String state, @Bind("zipCode") String zipCode, @Bind("address") String address);
 
+    @SqlUpdate("update bank_info set routing_number=:routingNumber, name=:name, city=:city, state=:state, zip_code=:zipCode, address=:address where id=:id")
+    public void updateBankInfo(@Bind("id") Long id, @Bind("routingNumber") Long routingNumber, @Bind("name") String name, @Bind("city") String city, @Bind("state") String state, @Bind("zipCode") String zipCode, @Bind("address") String address);
+
+    @SqlUpdate("update bank_info set deleted=true where routing_number=:routingNumber")
+    public void removeBankInfoByRoutingNumber(@Bind("routingNumber") Long routingNumber);
+
     @SqlQuery("select * from bank_info where id=:id")
     @Mapper(BankInfoMapper.class)
     public BankInfo getBankInfoById(@Bind("id") Long id);

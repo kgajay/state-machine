@@ -52,4 +52,21 @@ Steps to configure
         
         D) Search bank info by name
             curl -X GET 'http://127.0.0.1:9020/v1/bank-info/search?name=Bank%20of%20America'
+        
+        E) Delete bank info by routing number 
+           curl -X DELETE http://127.0.0.1:9020/v1/bank-info/122000030
+        
+        F) Update bank info by routing number 
+            curl -X PUT \
+              http://127.0.0.1:9020/v1/bank-info/122000030 \
+              -H 'content-type: application/json' \
+              -d '{
+            	"routing_number": 122000030,
+            	"name": "Bank of America 2",
+            	"city": "SAN FRANCISCO",
+            	"state": "CA",
+            	"zip_code": "94137",
+            	"address": "PO BOX 37025"
+            }'
+           
   

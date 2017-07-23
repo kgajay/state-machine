@@ -7,6 +7,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 import org.joda.time.DateTime;
 
 import javax.validation.constraints.NotNull;
+import java.util.Objects;
 
 /**
  * @author ajay.kg created on 23/07/17.
@@ -40,4 +41,25 @@ public class BankInfo {
 
     private DateTime createdAt;
     private DateTime updatedAt;
+
+    public void merge(BankInfo bankInfoReq) {
+        if (Objects.nonNull(bankInfoReq.getRoutingNumber())) {
+            this.setRoutingNumber(bankInfoReq.getRoutingNumber());
+        }
+        if (Objects.nonNull(bankInfoReq.getName())) {
+            this.setName(bankInfoReq.getName());
+        }
+        if (Objects.nonNull(bankInfoReq.getCity())) {
+            this.setCity(bankInfoReq.getCity());
+        }
+        if (Objects.nonNull(bankInfoReq.getState())) {
+            this.setState(bankInfoReq.getState());
+        }
+        if (Objects.nonNull(bankInfoReq.getZipCode())) {
+            this.setZipCode(bankInfoReq.getZipCode());
+        }
+        if (Objects.nonNull(bankInfoReq.getAddress())) {
+            this.setAddress(bankInfoReq.getAddress());
+        }
+    }
 }

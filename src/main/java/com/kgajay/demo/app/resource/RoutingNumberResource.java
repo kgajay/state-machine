@@ -12,8 +12,10 @@ import org.springframework.stereotype.Service;
 
 import javax.validation.Valid;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -94,5 +96,24 @@ public class RoutingNumberResource {
         List<BankInfo> response = routingNumberService.searchBankInfo(routingNumber, name);
         log.info("Exit:: searchBankInfo response : {}", DefaultObjectMapper.INSTANCE.getObjectMapper().writeValueAsString(response));
         return Response.ok(response).build();
+    }
+
+    @PUT
+    @Path("/bank-info/{routingNumber}")
+    @Timed
+    public Response updateBankInfo(@PathParam("routingNumber") final Long routingNumber, @Valid final BankInfo bankInfo) throws JsonProcessingException {
+        log.info("Entry:: updateBankInfo for : {}", routingNumber);
+        BankInfo response = routingNumberService.updateBankInfoByRoutingNumber(routingNumber, bankInfo);
+        log.info("Exit:: updateBankInfo response : {}", DefaultObjectMapper.INSTANCE.getObjectMapper().writeValueAsString(response));
+        return Response.ok(response).build();
+    }
+
+    @DELETE
+    @Path("/bank-info/{routingNumber}")
+    @Timed
+    public Response removeBankInfo(@PathParam("routingNumber") final Long routingNumber) {
+        log.info("Entry:: removeBankInfo for : {}", routingNumber);
+        routingNumberService.removeBankInfoByRoutingNum(routingNumber);
+        return Response.ok().build();
     }
 }

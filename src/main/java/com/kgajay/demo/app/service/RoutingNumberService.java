@@ -55,6 +55,17 @@ public class RoutingNumberService {
         }
     }
 
+    public BankInfo updateBankInfoByRoutingNumber(final Long routingNumber, final BankInfo bankInfoReq) {
+        BankInfo bankInfo = getBankInfoByRoutingNumber(routingNumber);
+        bankInfo.merge(bankInfoReq);
+        dbDao.updateBankInfo(bankInfo.getId(), bankInfo.getRoutingNumber(), bankInfo.getName(), bankInfo.getCity(), bankInfo.getState(), bankInfo.getZipCode(), bankInfo.getAddress());
+        return bankInfo;
+    }
+
+    public void removeBankInfoByRoutingNum(final Long routingNumber) {
+        dbDao.removeBankInfoByRoutingNumber(routingNumber);
+    }
+
     public BankInfo getBankInfoById(final Long id) {
         BankInfo bankInfo = dbDao.getBankInfoById(id);
         if (Objects.isNull(bankInfo))
