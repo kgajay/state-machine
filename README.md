@@ -28,15 +28,15 @@ Steps to configure
         
     8: Routing number search from site API
         
-        A) curl -X POST http://127.0.0.1:9020/v1/search/routing-number -d'["xyz", "abc"]' -H "Content-Type: application/json"
-        
+        A) curl -X PUT 'http://127.0.0.1:9020/v1/store/routing-number?q=1' -H 'content-type: application/json'
+              
     9: Sample crud API 
         
         A) Add a bank info 
             curl -X POST http://127.0.0.1:9020/v1/bank-info \
                  -H 'content-type: application/json' \
                  -d '{
-                "routing_number": 122000030,
+                "routing_number": "122000030",
                 "name": "Bank of America",
                 "city": "SAN FRANCISCO",
                 "state": "CA",
@@ -51,7 +51,7 @@ Steps to configure
             curl -X GET http://127.0.0.1:9020/v1/bank-info/search/122000030
         
         D) Search bank info by name
-            curl -X GET 'http://127.0.0.1:9020/v1/bank-info/search?name=Bank%20of%20America'
+            curl -X GET 'http://127.0.0.1:9020/v1/bank-info/search?name=Bank%20of%20America&limit=10&offset=1'
         
         E) Delete bank info by routing number 
            curl -X DELETE http://127.0.0.1:9020/v1/bank-info/122000030
@@ -61,7 +61,7 @@ Steps to configure
               http://127.0.0.1:9020/v1/bank-info/122000030 \
               -H 'content-type: application/json' \
               -d '{
-            	"routing_number": 122000030,
+            	"routing_number": "122000030",
             	"name": "Bank of America 2",
             	"city": "SAN FRANCISCO",
             	"state": "CA",

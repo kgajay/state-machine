@@ -22,13 +22,13 @@ public interface DBDao {
 
     @SqlUpdate("insert into bank_info (routing_number, name, city, state, zip_code, address) values (:routingNumber, :name, :city, :state, :zipCode, :address)")
     @GetGeneratedKeys
-    public Long insertBankInfo(@Bind("routingNumber") Long routingNumber, @Bind("name") String name, @Bind("city") String city, @Bind("state") String state, @Bind("zipCode") String zipCode, @Bind("address") String address);
+    public Long insertBankInfo(@Bind("routingNumber") String routingNumber, @Bind("name") String name, @Bind("city") String city, @Bind("state") String state, @Bind("zipCode") String zipCode, @Bind("address") String address);
 
     @SqlUpdate("update bank_info set routing_number=:routingNumber, name=:name, city=:city, state=:state, zip_code=:zipCode, address=:address where id=:id")
-    public void updateBankInfo(@Bind("id") Long id, @Bind("routingNumber") Long routingNumber, @Bind("name") String name, @Bind("city") String city, @Bind("state") String state, @Bind("zipCode") String zipCode, @Bind("address") String address);
+    public void updateBankInfo(@Bind("id") Long id, @Bind("routingNumber") String routingNumber, @Bind("name") String name, @Bind("city") String city, @Bind("state") String state, @Bind("zipCode") String zipCode, @Bind("address") String address);
 
     @SqlUpdate("update bank_info set deleted=true where routing_number=:routingNumber")
-    public void removeBankInfoByRoutingNumber(@Bind("routingNumber") Long routingNumber);
+    public void removeBankInfoByRoutingNumber(@Bind("routingNumber") String routingNumber);
 
     @SqlQuery("select * from bank_info where id=:id")
     @Mapper(BankInfoMapper.class)
@@ -36,14 +36,18 @@ public interface DBDao {
 
     @SqlQuery("select * from bank_info where routing_number=:routingNumber and deleted=false")
     @Mapper(BankInfoMapper.class)
-    public BankInfo getBankInfoByRoutingNumber(@Bind("routingNumber") Long routingNumber);
+    public BankInfo getBankInfoByRoutingNumber(@Bind("routingNumber") String routingNumber);
 
-    @SqlQuery("select * from bank_info where name like concat(:name,'%') and deleted=false")
+    @SqlQuery("select * from bank_info where name like concat(:name,'%') and deleted=false limit :limit offset :offset")
     @Mapper(BankInfoMapper.class)
-    public List<BankInfo> getBankInfoByName(@Bind("name") String name);
+    public List<BankInfo> getBankInfoByName(@Bind("name") String name, @Bind("offset") Long offset, @Bind("limit") Integer limit);
 
-    @SqlQuery("select * from bank_info where name like concat(:name,'%') and routing_number=:routingNumber and deleted=false")
+    @SqlQuery("select * from bank_info where deleted=false limit :limit offset :offset")
     @Mapper(BankInfoMapper.class)
-    public List<BankInfo> searchBankInfo(@Bind("name") String name, @Bind("routingNumber") Long routingNumber);
+    public List<BankInfo> listAllBankInfo(@Bind("offset") Long offset, @Bind("limit") Integer limit);
+
+    @SqlQuery("select * from bank_info where name like concat(:name,'%') and routing_number=:routingNumber and deleted=false limit :limit offset :offset")
+    @Mapper(BankInfoMapper.class)
+    public List<BankInfo> searchBankInfo(@Bind("name") String name, @Bind("routingNumber") String routingNumber, @Bind("offset") Long offset, @Bind("limit") Integer limit);
 
 }

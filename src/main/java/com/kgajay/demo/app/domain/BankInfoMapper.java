@@ -16,7 +16,7 @@ public class BankInfoMapper implements ResultSetMapper<BankInfo> {
     public BankInfo map(int i, ResultSet rs, StatementContext stmt) throws SQLException {
         BankInfo bankInfo = new BankInfo();
         bankInfo.setId(rs.getLong("id"));
-        bankInfo.setRoutingNumber(rs.getLong("routing_number"));
+        bankInfo.setRoutingNumber(rs.getString("routing_number"));
         bankInfo.setName(rs.getString("name"));
         bankInfo.setCity(rs.getString("city"));
         bankInfo.setState(rs.getString("state"));

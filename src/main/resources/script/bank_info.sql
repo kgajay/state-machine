@@ -1,6 +1,6 @@
 CREATE TABLE `bank_info` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `routing_number` int(11) NOT NULL,
+  `routing_number` varchar(64) NOT NULL,
   `name` varchar(255) NOT NULL,
   `city` varchar(64) DEFAULT NULL,
   `state` varchar(64) DEFAULT NULL,

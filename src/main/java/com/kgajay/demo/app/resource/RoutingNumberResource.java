@@ -47,7 +47,6 @@ public class RoutingNumberResource {
         return Response.ok(configuration.getAppName()).build();
     }
 
-
     @POST
     @Path("/search/routing-number")
     @Timed
@@ -57,6 +56,14 @@ public class RoutingNumberResource {
         return Response.ok().build();
     }
 
+    @PUT
+    @Path("/store/routing-number")
+    @Timed
+    public Response routingNumberSearch(@QueryParam("q") String bankFirstChar) {
+        log.info("Search routing number for bank : {}", bankFirstChar);
+        routingNumberService.storeBankRoutingNumber(bankFirstChar);
+        return Response.ok().build();
+    }
 
     @POST
     @Path("/bank-info")
@@ -81,7 +88,7 @@ public class RoutingNumberResource {
     @GET
     @Path("/bank-info/search/{routingNumber}")
     @Timed
-    public Response getBankInfoByRouting(@PathParam("routingNumber") final Long routingNumber) throws JsonProcessingException {
+    public Response getBankInfoByRouting(@PathParam("routingNumber") final String routingNumber) throws JsonProcessingException {
         log.info("Entry:: getBankInfoByRouting for : {}", routingNumber);
         BankInfo response = routingNumberService.getBankInfoByRoutingNumber(routingNumber);
         log.info("Exit:: getBankInfoByRouting response : {}", DefaultObjectMapper.INSTANCE.getObjectMapper().writeValueAsString(response));
@@ -91,9 +98,9 @@ public class RoutingNumberResource {
     @GET
     @Path("/bank-info/search")
     @Timed
-    public Response searchBankInfo(@QueryParam("routing_number") final Long routingNumber, @QueryParam("name") final String name) throws JsonProcessingException {
+    public Response searchBankInfo(@QueryParam("routing_number") final String routingNumber, @QueryParam("name") final String name, @QueryParam("offset") final Long offset, @QueryParam("limit") final Integer limit) throws JsonProcessingException {
         log.info("Entry:: searchBankInfo for : {}", routingNumber);
-        List<BankInfo> response = routingNumberService.searchBankInfo(routingNumber, name);
+        List<BankInfo> response = routingNumberService.searchBankInfo(routingNumber, name, offset, limit);
         log.info("Exit:: searchBankInfo response : {}", DefaultObjectMapper.INSTANCE.getObjectMapper().writeValueAsString(response));
         return Response.ok(response).build();
     }
@@ -101,7 +108,7 @@ public class RoutingNumberResource {
     @PUT
     @Path("/bank-info/{routingNumber}")
     @Timed
-    public Response updateBankInfo(@PathParam("routingNumber") final Long routingNumber, @Valid final BankInfo bankInfo) throws JsonProcessingException {
+    public Response updateBankInfo(@PathParam("routingNumber") final String routingNumber, @Valid final BankInfo bankInfo) throws JsonProcessingException {
         log.info("Entry:: updateBankInfo for : {}", routingNumber);
         BankInfo response = routingNumberService.updateBankInfoByRoutingNumber(routingNumber, bankInfo);
         log.info("Exit:: updateBankInfo response : {}", DefaultObjectMapper.INSTANCE.getObjectMapper().writeValueAsString(response));
@@ -111,7 +118,7 @@ public class RoutingNumberResource {
     @DELETE
     @Path("/bank-info/{routingNumber}")
     @Timed
-    public Response removeBankInfo(@PathParam("routingNumber") final Long routingNumber) {
+    public Response removeBankInfo(@PathParam("routingNumber") final String routingNumber) {
         log.info("Entry:: removeBankInfo for : {}", routingNumber);
         routingNumberService.removeBankInfoByRoutingNum(routingNumber);
         return Response.ok().build();

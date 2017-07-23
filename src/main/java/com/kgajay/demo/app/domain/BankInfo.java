@@ -2,6 +2,8 @@ package com.kgajay.demo.app.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.kgajay.demo.app.db.DBDao;
+import com.kgajay.demo.utils.AsyncWorker;
 import lombok.Data;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.joda.time.DateTime;
@@ -20,7 +22,7 @@ public class BankInfo {
     private Long id;
 
     @NotNull
-    private Long routingNumber;
+    private String routingNumber;
 
     @NotEmpty
     private String name;
@@ -61,5 +63,16 @@ public class BankInfo {
         if (Objects.nonNull(bankInfoReq.getAddress())) {
             this.setAddress(bankInfoReq.getAddress());
         }
+    }
+
+    public static void checkAndUpdate(DBDao dbDao, String routingNumber, String name, String city, String state, String zipCode, String address) {
+        AsyncWorker.INSTANCE.execute(() -> {
+            BankInfo bankInfo = dbDao.getBankInfoByRoutingNumber(routingNumber);
+            if (Objects.isNull(bankInfo)) {
+                dbDao.insertBankInfo(routingNumber, name, city, state, zipCode, address);
+            } else {
+                dbDao.updateBankInfo(bankInfo.getId(), routingNumber, name, city, state, zipCode, address);
+            }
+        });
     }
 }

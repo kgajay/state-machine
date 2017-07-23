@@ -23,6 +23,9 @@ import java.util.Objects;
 @Service
 public class RoutingNumberService {
 
+    private static final Integer DEFAULT_LIMIT = 100;
+    private static final Long DEFAULT_OFFSET = 0l;
+
     @Autowired
     private AppConfiguration configuration;
 
@@ -34,12 +37,24 @@ public class RoutingNumberService {
 
     public void searchForBankRoutingNumber(List<String> bankName) {
 
-//        WebDriverUtils webDriverUtils = new WebDriverUtils();
         webDriverService.setDriver("firefox", configuration.getRoutingNumConfig().getUrl());
         webDriverService.getDriver().getTitle();
         RoutingPageUI routingPageUI = new RoutingPageUI(webDriverService.getDriver());
         webDriverService.tearDown();
 
+    }
+
+    public void storeBankRoutingNumber(String bankFirstChar) {
+        try {
+            webDriverService.setDriver("firefox", configuration.getRoutingNumConfig().getUrl());
+            webDriverService.getDriver().getTitle();
+            RoutingPageUI routingPageUI = new RoutingPageUI(webDriverService.getDriver());
+            routingPageUI.storeAllBankInfoStartWithChar(dbDao, configuration.getRoutingNumConfig().getUrl(), bankFirstChar);
+        } catch (Exception ex) {
+            log.error("storeBankRoutingNumber error: {}", ex);
+        } finally {
+            webDriverService.tearDown();
+        }
     }
 
     public BankInfo addBankBasicDetails(final BankInfo bankInfo) {
@@ -55,14 +70,14 @@ public class RoutingNumberService {
         }
     }
 
-    public BankInfo updateBankInfoByRoutingNumber(final Long routingNumber, final BankInfo bankInfoReq) {
+    public BankInfo updateBankInfoByRoutingNumber(final String routingNumber, final BankInfo bankInfoReq) {
         BankInfo bankInfo = getBankInfoByRoutingNumber(routingNumber);
         bankInfo.merge(bankInfoReq);
         dbDao.updateBankInfo(bankInfo.getId(), bankInfo.getRoutingNumber(), bankInfo.getName(), bankInfo.getCity(), bankInfo.getState(), bankInfo.getZipCode(), bankInfo.getAddress());
         return bankInfo;
     }
 
-    public void removeBankInfoByRoutingNum(final Long routingNumber) {
+    public void removeBankInfoByRoutingNum(final String routingNumber) {
         dbDao.removeBankInfoByRoutingNumber(routingNumber);
     }
 
@@ -73,19 +88,23 @@ public class RoutingNumberService {
         return bankInfo;
     }
 
-    public BankInfo getBankInfoByRoutingNumber(final Long routingNumber) {
+    public BankInfo getBankInfoByRoutingNumber(final String routingNumber) {
         BankInfo bankInfo = dbDao.getBankInfoByRoutingNumber(routingNumber);
         if (Objects.isNull(bankInfo))
             throw new WebApplicationException(Response.Status.NOT_FOUND);
         return bankInfo;
     }
 
-    public List<BankInfo> searchBankInfo(final Long routingNumber, final String name) {
+    public List<BankInfo> searchBankInfo(final String routingNumber, final String name, Long offset, Integer limit) {
+        offset = Objects.isNull(offset) ? DEFAULT_OFFSET : offset;
+        limit = Objects.isNull(limit) ? DEFAULT_LIMIT : limit;
         if (Objects.nonNull(routingNumber) && !Strings.isNullOrEmpty(name))
-            return dbDao.searchBankInfo(name, routingNumber);
+            return dbDao.searchBankInfo(name, routingNumber, offset, limit);
         else if (!Strings.isNullOrEmpty(name))
-            return dbDao.getBankInfoByName(name);
-        else
+            return dbDao.getBankInfoByName(name, offset, limit);
+        else if (Objects.nonNull(routingNumber))
             return Arrays.asList(getBankInfoByRoutingNumber(routingNumber));
+        else
+            return dbDao.listAllBankInfo(offset, limit);
     }
 }
