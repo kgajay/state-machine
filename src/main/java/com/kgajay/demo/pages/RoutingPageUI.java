@@ -4,6 +4,7 @@ import com.kgajay.demo.app.db.DBDao;
 import com.kgajay.demo.app.domain.BankInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -46,27 +47,32 @@ public class RoutingPageUI {
         for(int i=1; i<=rows; i++) {
             for(int j=1; j<=columns; j++) {
                 String elemXpath = ".//*[@id='container']/div[3]/div[1]/table/tbody/tr[" + i + "]/td[" + j + "]/a";
-                WebElement elem = this.driver.findElement(By.xpath(elemXpath));
-                if (Objects.nonNull(elem)) {
-                    String name = elem.getText();
-                    this.doOperation.click(elem);
-                    // this.doOperation.click(this.driver.findElement(By.linkText(name)));
-                    int xRows = this.driver.findElements(By.xpath(".//*[@id='container']/div[3]/div[1]/table/tbody/tr")).size();
-                    for (int k=1; k<=xRows; k++) {
-                        int routingNumbers = this.driver.findElements(By.xpath(".//*[@id='container']/div[3]/div[1]/table/tbody/tr[" + k + "]/td[1]/a")).size();
-                        String routingNumber = null;
-                        if (routingNumbers > 1) {
-                            routingNumber = this.driver.findElement(By.xpath(".//*[@id='container']/div[3]/div[1]/table/tbody/tr[" + k + "]/td[1]/a[" + routingNumbers + "]")).getText();
-                        } else {
-                            routingNumber = this.driver.findElement(By.xpath(".//*[@id='container']/div[3]/div[1]/table/tbody/tr[" + k + "]/td[1]")).getText();
+                try {
+                    WebElement elem = this.driver.findElement(By.xpath(elemXpath));
+                    if (Objects.nonNull(elem)) {
+                        String name = elem.getText();
+                        this.doOperation.click(elem);
+                        // this.doOperation.click(this.driver.findElement(By.linkText(name)));
+                        int xRows = this.driver.findElements(By.xpath(".//*[@id='container']/div[3]/div[1]/table/tbody/tr")).size();
+                        for (int k = 1; k <= xRows; k++) {
+                            int routingNumbers = this.driver.findElements(By.xpath(".//*[@id='container']/div[3]/div[1]/table/tbody/tr[" + k + "]/td[1]/a")).size();
+                            String routingNumber = null;
+                            if (routingNumbers > 1) {
+                                routingNumber = this.driver.findElement(
+                                        By.xpath(".//*[@id='container']/div[3]/div[1]/table/tbody/tr[" + k + "]/td[1]/a[" + routingNumbers + "]")).getText();
+                            } else {
+                                routingNumber = this.driver.findElement(By.xpath(".//*[@id='container']/div[3]/div[1]/table/tbody/tr[" + k + "]/td[1]")).getText();
+                            }
+                            String address = this.driver.findElement(By.xpath(".//*[@id='container']/div[3]/div[1]/table/tbody/tr[" + k + "]/td[2]")).getText();
+                            String city = this.driver.findElement(By.xpath(".//*[@id='container']/div[3]/div[1]/table/tbody/tr[" + k + "]/td[3]")).getText();
+                            String state = this.driver.findElement(By.xpath(".//*[@id='container']/div[3]/div[1]/table/tbody/tr[" + k + "]/td[4]")).getText();
+                            String zipCode = this.driver.findElement(By.xpath(".//*[@id='container']/div[3]/div[1]/table/tbody/tr[" + k + "]/td[5]")).getText();
+                            BankInfo.checkAndUpdate(dbDao, routingNumber, name, city, state, zipCode, address);
                         }
-                        String address = this.driver.findElement(By.xpath(".//*[@id='container']/div[3]/div[1]/table/tbody/tr[" + k + "]/td[2]")).getText();
-                        String city = this.driver.findElement(By.xpath(".//*[@id='container']/div[3]/div[1]/table/tbody/tr[" + k + "]/td[3]")).getText();
-                        String state = this.driver.findElement(By.xpath(".//*[@id='container']/div[3]/div[1]/table/tbody/tr[" + k + "]/td[4]")).getText();
-                        String zipCode = this.driver.findElement(By.xpath(".//*[@id='container']/div[3]/div[1]/table/tbody/tr[" + k + "]/td[5]")).getText();
-                        BankInfo.checkAndUpdate(dbDao, routingNumber, name, city, state, zipCode, address);
+                        this.driver.navigate().to(urlToNavigate);
                     }
-                    this.driver.navigate().to(urlToNavigate);
+                } catch (NoSuchElementException nse) {
+                    log.error("NoSuchContextException for i: {}, j: {}, xPath: {}", i, j, elemXpath);
                 }
             }
         }
