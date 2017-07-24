@@ -38,7 +38,6 @@ public class RoutingPageUI {
         this.doOperation = new DoOperation(driver);
     }
 
-    // this.driver.findElement(By.linkText("121 FINANCIAL CREDIT UNION")).getAttribute("href")
     public void storeAllBankInfoStartWithChar(DBDao dbDao, String baseUrl, String ch) {
         String urlToNavigate = baseUrl.concat("/banks.").concat(ch);
         this.driver.navigate().to(urlToNavigate);
@@ -46,11 +45,12 @@ public class RoutingPageUI {
         int columns = this.driver.findElements(By.xpath(".//*[@id='container']/div[3]/div[1]/table/tbody/tr[1]/td")).size();
         for(int i=1; i<=rows; i++) {
             for(int j=1; j<=columns; j++) {
-                String elemXpath = ".//*[@id='container']/div[3]/div[1]/table/tbody/tr[" + i + "]/td[" + j + "]";
+                String elemXpath = ".//*[@id='container']/div[3]/div[1]/table/tbody/tr[" + i + "]/td[" + j + "]/a";
                 WebElement elem = this.driver.findElement(By.xpath(elemXpath));
                 if (Objects.nonNull(elem)) {
                     String name = elem.getText();
-                    this.doOperation.click(this.driver.findElement(By.linkText(name)));
+                    this.doOperation.click(elem);
+                    // this.doOperation.click(this.driver.findElement(By.linkText(name)));
                     int xRows = this.driver.findElements(By.xpath(".//*[@id='container']/div[3]/div[1]/table/tbody/tr")).size();
                     for (int k=1; k<=xRows; k++) {
                         int routingNumbers = this.driver.findElements(By.xpath(".//*[@id='container']/div[3]/div[1]/table/tbody/tr[" + k + "]/td[1]/a")).size();

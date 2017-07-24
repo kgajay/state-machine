@@ -52,6 +52,7 @@ Steps to configure
         
         D) Search bank info by name
             curl -X GET 'http://127.0.0.1:9020/v1/bank-info/search?name=Bank%20of%20America&limit=10&offset=1'
+            curl -X GET http://127.0.0.1:9020/v1/bank-info/search?routing_number=2
         
         E) Delete bank info by routing number 
            curl -X DELETE http://127.0.0.1:9020/v1/bank-info/122000030

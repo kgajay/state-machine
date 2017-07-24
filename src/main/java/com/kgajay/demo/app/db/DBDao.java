@@ -38,6 +38,10 @@ public interface DBDao {
     @Mapper(BankInfoMapper.class)
     public BankInfo getBankInfoByRoutingNumber(@Bind("routingNumber") String routingNumber);
 
+    @SqlQuery("select * from bank_info where routing_number like concat(:routingNumber,'%') and deleted=false")
+    @Mapper(BankInfoMapper.class)
+    public List<BankInfo> listBankInfoByRoutingNumber(@Bind("routingNumber") String routingNumber, @Bind("offset") Long offset, @Bind("limit") Integer limit);
+
     @SqlQuery("select * from bank_info where name like concat(:name,'%') and deleted=false limit :limit offset :offset")
     @Mapper(BankInfoMapper.class)
     public List<BankInfo> getBankInfoByName(@Bind("name") String name, @Bind("offset") Long offset, @Bind("limit") Integer limit);
@@ -46,7 +50,7 @@ public interface DBDao {
     @Mapper(BankInfoMapper.class)
     public List<BankInfo> listAllBankInfo(@Bind("offset") Long offset, @Bind("limit") Integer limit);
 
-    @SqlQuery("select * from bank_info where name like concat(:name,'%') and routing_number=:routingNumber and deleted=false limit :limit offset :offset")
+    @SqlQuery("select * from bank_info where name like concat(:name,'%') and routing_number like concat(:routingNumber,'%') and deleted=false limit :limit offset :offset")
     @Mapper(BankInfoMapper.class)
     public List<BankInfo> searchBankInfo(@Bind("name") String name, @Bind("routingNumber") String routingNumber, @Bind("offset") Long offset, @Bind("limit") Integer limit);
 

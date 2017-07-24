@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -103,7 +102,7 @@ public class RoutingNumberService {
         else if (!Strings.isNullOrEmpty(name))
             return dbDao.getBankInfoByName(name, offset, limit);
         else if (Objects.nonNull(routingNumber))
-            return Arrays.asList(getBankInfoByRoutingNumber(routingNumber));
+            return dbDao.listBankInfoByRoutingNumber(routingNumber, offset, limit);
         else
             return dbDao.listAllBankInfo(offset, limit);
     }
