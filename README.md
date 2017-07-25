@@ -6,11 +6,11 @@ Java lib =>
     
 Steps to configure
 
-    1: Install maven of version 3
+    1: Install maven2
     
     2: Intall Java 1.8
     
-    3: clone project to your local, git clone https://gitlab.com/kgajay/sample-ui-scraping.git
+    3: clone project to your local, git clone https://github.com/kgajay/sample-ui-scraping.git
     
     4: go to sample-ui-scraping
     
