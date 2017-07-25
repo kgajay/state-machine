@@ -6,7 +6,7 @@ Java lib =>
     
 Steps to configure
 
-    1: Install maven2
+    1: Install maven3
     
     2: Intall Java 1.8
     
