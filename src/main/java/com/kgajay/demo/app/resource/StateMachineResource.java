@@ -6,6 +6,7 @@ import com.kgajay.demo.app.domain.StateMachine;
 import com.kgajay.demo.app.domain.Transition;
 import com.kgajay.demo.app.service.StateMachineService;
 import com.kgajay.demo.config.AppConfiguration;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,6 +27,7 @@ import javax.ws.rs.core.Response;
  */
 @Slf4j
 @Path("/v1")
+@Setter
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 @Service("StateMachineResource")

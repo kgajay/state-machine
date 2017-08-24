@@ -116,3 +116,6 @@ Steps to configure
                           "*A -> B ( 1 )",
                           "B -> A ( 2 )"
                       ]
+                      
+    9) Test (can be found in directory src/test/* )
+        mvn clean test

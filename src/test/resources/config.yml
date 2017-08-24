@@ -19,7 +19,7 @@ server:
     timeZone: Asia/Calcutta
 
 database:
-  driverClass: com.mysql.jdbc.Driver
+  driverClass: com.mysql.cj.jdbc.Driver
   user: root
   password: mysql
   url: jdbc:mysql://127.0.0.1:3306/jaxrs
@@ -36,4 +36,4 @@ database:
   maxSize: 32
   checkConnectionWhileIdle: false
 
-template: Hello, %s!
+appName: state machine
