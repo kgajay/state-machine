@@ -16,5 +16,4 @@ public class AppConfiguration extends Configuration {
 
     private String appName;
 
-    private RoutingNumConfig routingNumConfig;
 }

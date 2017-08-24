@@ -36,7 +36,4 @@ database:
   maxSize: 32
   checkConnectionWhileIdle: false
 
-appName: routing numbers srapper
-
-routingNumConfig:
-  url: http://us-routing-numbers.com
+appName: state machine

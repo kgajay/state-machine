@@ -2,8 +2,7 @@ package com.kgajay.demo;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.kgajay.demo.app.healthcheck.DataSourceHealthCheck;
-import com.kgajay.demo.app.resource.RoutingNumberResource;
-import com.kgajay.demo.app.service.WebDriverService;
+import com.kgajay.demo.app.resource.StateMachineResource;
 import com.kgajay.demo.config.AppConfiguration;
 import com.kgajay.demo.config.SpringConfig;
 import com.kgajay.demo.utils.SpringProvider;
@@ -46,14 +45,13 @@ public class SyncApplication extends Application<AppConfiguration> {
             @Override
             public void stop() throws Exception {
                 SpringProvider.INSTANCE.getContext().destroy();
-                SpringProvider.INSTANCE.getContext().getBean(WebDriverService.class).tearDown();
             }
         });
 
 
         environment.healthChecks().register("database", SpringProvider.INSTANCE.getContext().getBean(DataSourceHealthCheck.class));
 
-        environment.jersey().register(SpringProvider.INSTANCE.getContext().getBean(RoutingNumberResource.class));
+        environment.jersey().register(SpringProvider.INSTANCE.getContext().getBean(StateMachineResource.class));
 
     }
 

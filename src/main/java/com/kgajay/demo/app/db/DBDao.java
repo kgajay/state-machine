@@ -1,7 +1,11 @@
 package com.kgajay.demo.app.db;
 
-import com.kgajay.demo.app.domain.BankInfo;
-import com.kgajay.demo.app.domain.BankInfoMapper;
+import com.kgajay.demo.app.domain.Node;
+import com.kgajay.demo.app.domain.NodeMapper;
+import com.kgajay.demo.app.domain.StateMachine;
+import com.kgajay.demo.app.domain.StateMachineMapper;
+import com.kgajay.demo.app.domain.Transition;
+import com.kgajay.demo.app.domain.TransitionMapper;
 import org.skife.jdbi.v2.sqlobject.Bind;
 import org.skife.jdbi.v2.sqlobject.GetGeneratedKeys;
 import org.skife.jdbi.v2.sqlobject.SqlQuery;
@@ -20,38 +24,43 @@ public interface DBDao {
     @SqlQuery("select 1")
     Integer healthCheck();
 
-    @SqlUpdate("insert into bank_info (routing_number, name, city, state, zip_code, address) values (:routingNumber, :name, :city, :state, :zipCode, :address)")
+    @SqlUpdate("insert into state_machine (name, description, start_node_id) values (:name, :description, :startNodeId)")
     @GetGeneratedKeys
-    public Long insertBankInfo(@Bind("routingNumber") String routingNumber, @Bind("name") String name, @Bind("city") String city, @Bind("state") String state, @Bind("zipCode") String zipCode, @Bind("address") String address);
+    public Long insertStateMachine(@Bind("name") String name, @Bind("description") String description, @Bind("startNodeId") Long startNodeId);
 
-    @SqlUpdate("update bank_info set routing_number=:routingNumber, name=:name, city=:city, state=:state, zip_code=:zipCode, address=:address where id=:id")
-    public void updateBankInfo(@Bind("id") Long id, @Bind("routingNumber") String routingNumber, @Bind("name") String name, @Bind("city") String city, @Bind("state") String state, @Bind("zipCode") String zipCode, @Bind("address") String address);
+    @SqlQuery("select * from state_machine where id=:id")
+    @Mapper(StateMachineMapper.class)
+    public StateMachine getStateMachineById(@Bind("id") Long id);
 
-    @SqlUpdate("update bank_info set deleted=true where routing_number=:routingNumber")
-    public void removeBankInfoByRoutingNumber(@Bind("routingNumber") String routingNumber);
+    @SqlUpdate("update state_machine set name=:name, description=:description, start_node_id=:startNodeId where id=:id")
+    @GetGeneratedKeys
+    public Long updateStateMachine(@Bind("id") Long id, @Bind("name") String name, @Bind("description") String description, @Bind("startNodeId") Long startNodeId);
 
-    @SqlQuery("select * from bank_info where id=:id")
-    @Mapper(BankInfoMapper.class)
-    public BankInfo getBankInfoById(@Bind("id") Long id);
 
-    @SqlQuery("select * from bank_info where routing_number=:routingNumber and deleted=false")
-    @Mapper(BankInfoMapper.class)
-    public BankInfo getBankInfoByRoutingNumber(@Bind("routingNumber") String routingNumber);
+    @SqlUpdate("insert into node (name, description, is_current) values (:name, :description, :isCurrent)")
+    @GetGeneratedKeys
+    public Long insertNode(@Bind("name") String name, @Bind("description") String description, @Bind("isCurrent") Boolean isCurrent);
 
-    @SqlQuery("select * from bank_info where routing_number like concat(:routingNumber,'%') and deleted=false")
-    @Mapper(BankInfoMapper.class)
-    public List<BankInfo> listBankInfoByRoutingNumber(@Bind("routingNumber") String routingNumber, @Bind("offset") Long offset, @Bind("limit") Integer limit);
+    @SqlQuery("select * from node where id=:id")
+    @Mapper(NodeMapper.class)
+    public Node getNode(@Bind("id") Long id);
 
-    @SqlQuery("select * from bank_info where name like concat(:name,'%') and deleted=false limit :limit offset :offset")
-    @Mapper(BankInfoMapper.class)
-    public List<BankInfo> getBankInfoByName(@Bind("name") String name, @Bind("offset") Long offset, @Bind("limit") Integer limit);
+    @SqlUpdate("update node set is_current=:isCurrent where id=:id")
+    public void setNodeIsCurrent(@Bind("id") Long id, @Bind("isCurrent") Boolean isCurrent);
 
-    @SqlQuery("select * from bank_info where deleted=false limit :limit offset :offset")
-    @Mapper(BankInfoMapper.class)
-    public List<BankInfo> listAllBankInfo(@Bind("offset") Long offset, @Bind("limit") Integer limit);
+    @SqlUpdate("insert into transition (path, description, source_node_id, destination_node_id) values (:path, :description, :sourceNodeId, :destinationNodeId)")
+    @GetGeneratedKeys
+    public Long insertTransition(@Bind("path") String path, @Bind("description") String description, @Bind("sourceNodeId") Long sourceNodeId, @Bind("destinationNodeId") Long destinationNodeId);
 
-    @SqlQuery("select * from bank_info where name like concat(:name,'%') and routing_number like concat(:routingNumber,'%') and deleted=false limit :limit offset :offset")
-    @Mapper(BankInfoMapper.class)
-    public List<BankInfo> searchBankInfo(@Bind("name") String name, @Bind("routingNumber") String routingNumber, @Bind("offset") Long offset, @Bind("limit") Integer limit);
+    @SqlQuery("select * from transition where id=:id")
+    @Mapper(TransitionMapper.class)
+    public Transition getTransition(@Bind("id") Long id);
 
+    @SqlQuery("select * from transition where source_node_id=:nodeId and path=:path")
+    @Mapper(TransitionMapper.class)
+    public Transition findTransition(@Bind("nodeId") Long nodeId, @Bind("path") String path);
+
+    @SqlQuery("select * from transition where source_node_id=:nodeId")
+    @Mapper(TransitionMapper.class)
+    public List<Transition> findAllTransitions(@Bind("nodeId") Long nodeId);
 }

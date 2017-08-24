@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.kgajay.demo</groupId>
-    <artifactId>sample-ui-scraping</artifactId>
+    <artifactId>state-machine</artifactId>
     <version>0.0.1-SNAPSHOT</version>
 
     <properties>
